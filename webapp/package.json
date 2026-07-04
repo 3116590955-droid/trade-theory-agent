@@ -11,10 +11,13 @@
   "dependencies": {
     "@anthropic-ai/sdk": "0.26.1",
     "gray-matter": "4.0.3",
+    "katex": "^0.16.11",
     "next": "14.2.35",
     "react": "^18",
     "react-dom": "^18",
-    "react-markdown": "^9.0.1"
+    "react-markdown": "^9.0.1",
+    "rehype-katex": "^7.0.1",
+    "remark-math": "^6.0.0"
   },
   "devDependencies": {
     "@tailwindcss/typography": "^0.5.15",

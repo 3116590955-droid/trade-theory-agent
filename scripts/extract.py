@@ -3,6 +3,7 @@ sys.stdout.reconfigure(encoding='utf-8')
 
 from pathlib import Path
 import fitz  # pymupdf
+from pptx import Presentation
 
 SOURCE_DIR = Path(__file__).parent.parent / "国际经济学课上知识"
 OUTPUT_DIR = Path(__file__).parent.parent / "knowledge_base"
@@ -15,6 +16,22 @@ def extract_pdf(path: Path) -> str:
         pages.append(page.get_text())
     doc.close()
     return "\n".join(pages)
+
+
+def extract_pptx(path: Path) -> str:
+    prs = Presentation(str(path))
+    slides = []
+    for i, slide in enumerate(prs.slides, 1):
+        texts = []
+        for shape in slide.shapes:
+            if shape.has_text_frame:
+                for para in shape.text_frame.paragraphs:
+                    line = para.text.strip()
+                    if line:
+                        texts.append(line)
+        if texts:
+            slides.append(f"[Slide {i}]\n" + "\n".join(texts))
+    return "\n\n".join(slides)
 
 
 def main():

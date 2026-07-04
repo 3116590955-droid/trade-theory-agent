@@ -12,7 +12,7 @@ const client = new Anthropic({
 });
 
 function getSystemPrompt(): string {
-  const promptPath = path.resolve(process.cwd(), "../system_prompt.md");
+  const promptPath = path.resolve(process.cwd(), "system_prompt.md");
   if (fs.existsSync(promptPath)) {
     return fs.readFileSync(promptPath, "utf-8");
   }

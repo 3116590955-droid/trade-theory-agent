@@ -7,7 +7,7 @@ const MAX_CHARS = 8000;
 export function searchKnowledge(query: string): string {
   const KNOWLEDGE_DIR =
     process.env.KNOWLEDGE_BASE_DIR ||
-    path.resolve(process.cwd(), "../knowledge_base");
+    path.resolve(process.cwd(), "knowledge_base");
 
   if (!fs.existsSync(KNOWLEDGE_DIR)) return "";
 

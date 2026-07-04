@@ -6,9 +6,13 @@
 # 原始课程材料（版权材料，本地保留）
 国际经济学课上知识/
 
-# 生成的知识库 MD 文件（体积大，可本地重建）
+# 根目录知识库 MD 文件（体积大，可本地重建）
 knowledge_base/*.md
 !knowledge_base/.gitkeep
+
+# webapp 内的知识库和 system prompt 需要部署，不忽略
+!webapp/knowledge_base/*.md
+!webapp/system_prompt.md
 
 # Python
 __pycache__/
@@ -25,3 +29,6 @@ webapp/out/
 # OS
 .DS_Store
 Thumbs.db
+
+.vercel
+.env*

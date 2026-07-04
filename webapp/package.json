@@ -10,7 +10,6 @@
   },
   "dependencies": {
     "@anthropic-ai/sdk": "0.26.1",
-    "@next/swc-win32-x64-msvc": "^16.2.10",
     "gray-matter": "4.0.3",
     "next": "14.2.35",
     "react": "^18",

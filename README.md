@@ -14,3 +14,8 @@ npm install
 npm run dev
 
 访问 http://localhost:3000
+
+## 当前限制
+
+- 知识检索仅基于本地课程材料（Krugman、Melitz、EK 等），arXiv 实时检索功能计划在后续版本实现
+- 超出知识边界的问题将基于模型自身知识回答，不进行外部检索

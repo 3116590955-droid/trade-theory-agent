@@ -2,7 +2,7 @@ import fs from "fs";
 import path from "path";
 import matter from "gray-matter";
 
-const MAX_CHARS = 3000;
+const MAX_CHARS = 8000;
 
 export function searchKnowledge(query: string): string {
   const KNOWLEDGE_DIR =

@@ -47,7 +47,8 @@ def write_markdown(src: Path, out_dir: Path) -> None:
 
     header = f"---\nsource: {src.name}\ntype: {file_type}\noriginal_path: 国际经济学课上知识/{src.name}\n---\n\n"
     out_path = out_dir / (src.stem + ".md")
-    out_path.write_text(header + body, encoding="utf-8")
+    clean_body = body.replace("\x00", "")
+    out_path.write_text(header + clean_body, encoding="utf-8")
     print(f"  OK {src.name} -> {out_path.name}")
 
 

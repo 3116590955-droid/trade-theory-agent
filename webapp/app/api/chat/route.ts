@@ -4,7 +4,10 @@ import fs from "fs";
 import path from "path";
 import { searchKnowledge } from "@/lib/knowledge";
 
-const client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
+const client = new Anthropic({
+  apiKey: process.env.ANTHROPIC_API_KEY,
+  baseURL: process.env.ANTHROPIC_BASE_URL,
+});
 
 function getSystemPrompt(): string {
   const promptPath = path.resolve(process.cwd(), "../system_prompt.md");
@@ -76,7 +79,7 @@ export async function POST(req: NextRequest) {
       : systemPrompt;
 
   const response = await client.messages.create({
-    model: "claude-sonnet-5-20250514",
+    model: "claude-sonnet-4-6",
     max_tokens: 1024,
     system: fullSystem,
     messages: [{ role: "user", content: message }],

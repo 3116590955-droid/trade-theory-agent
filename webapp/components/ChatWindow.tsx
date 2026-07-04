@@ -82,7 +82,7 @@ export function ChatWindow() {
   }
 
   return (
-    <div className="flex flex-col h-screen w-3/4 mx-auto p-4 md:p-6">
+    <div className="flex flex-col h-screen w-full px-[12.5%] py-4 md:py-6">
       <div className="flex items-center justify-center gap-3 mb-4 flex-shrink-0">
         <img
           src="/krugman.png"

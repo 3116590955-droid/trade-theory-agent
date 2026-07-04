@@ -9,11 +9,16 @@ export function ChatWindow() {
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
   const [elapsed, setElapsed] = useState(0);
-  const bottomRef = useRef<HTMLDivElement>(null);
+  const messagesEndRef = useRef<HTMLDivElement>(null);
+  const messagesContainerRef = useRef<HTMLDivElement>(null);
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
+  // 在消息容器内部滚到底部，不影响页面整体滚动
   useEffect(() => {
-    bottomRef.current?.scrollIntoView({ behavior: "smooth" });
+    const container = messagesContainerRef.current;
+    if (container) {
+      container.scrollTop = container.scrollHeight;
+    }
   }, [messages, loading]);
 
   useEffect(() => {
@@ -78,7 +83,7 @@ export function ChatWindow() {
 
   return (
     <div className="flex flex-col h-screen max-w-2xl mx-auto p-4">
-      <div className="flex items-center justify-center gap-3 mb-4">
+      <div className="flex items-center justify-center gap-3 mb-4 flex-shrink-0">
         <img
           src="/krugman.png"
           alt="Krugman"
@@ -88,7 +93,10 @@ export function ChatWindow() {
           第四组：克鲁格曼的小跟班
         </h1>
       </div>
-      <div className="flex-1 overflow-y-auto border rounded-lg p-4 bg-white">
+      <div
+        ref={messagesContainerRef}
+        className="flex-1 overflow-y-auto border rounded-lg p-4 bg-white min-h-0"
+      >
         {messages.length === 0 && (
           <p className="text-gray-400 text-sm text-center mt-8">
             请输入关于新贸易理论的问题
@@ -103,9 +111,9 @@ export function ChatWindow() {
             <span>思考中… 已等待 {elapsed} 秒</span>
           </div>
         )}
-        <div ref={bottomRef} />
+        <div ref={messagesEndRef} />
       </div>
-      <div className="flex gap-2 mt-3">
+      <div className="flex gap-2 mt-3 flex-shrink-0">
         <input
           className="flex-1 border rounded-lg px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-blue-400"
           value={input}

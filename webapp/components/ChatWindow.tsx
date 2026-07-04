@@ -78,9 +78,16 @@ export function ChatWindow() {
 
   return (
     <div className="flex flex-col h-screen max-w-2xl mx-auto p-4">
-      <h1 className="text-lg font-semibold mb-4 text-center">
-        新贸易理论智能体
-      </h1>
+      <div className="flex items-center justify-center gap-3 mb-4">
+        <img
+          src="/krugman.png"
+          alt="Krugman"
+          className="w-10 h-10 rounded-full object-cover border-2 border-blue-200 shadow-sm"
+        />
+        <h1 className="text-lg font-semibold">
+          第四组：克鲁格曼的小跟班
+        </h1>
+      </div>
       <div className="flex-1 overflow-y-auto border rounded-lg p-4 bg-white">
         {messages.length === 0 && (
           <p className="text-gray-400 text-sm text-center mt-8">

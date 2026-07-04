@@ -34,13 +34,31 @@ def extract_pptx(path: Path) -> str:
     return "\n\n".join(slides)
 
 
+def write_markdown(src: Path, out_dir: Path) -> None:
+    suffix = src.suffix.lower()
+    if suffix == ".pdf":
+        body = extract_pdf(src)
+        file_type = "pdf"
+    elif suffix == ".pptx":
+        body = extract_pptx(src)
+        file_type = "pptx"
+    else:
+        return  # 跳过不支持的格式
+
+    header = f"---\nsource: {src.name}\ntype: {file_type}\noriginal_path: 国际经济学课上知识/{src.name}\n---\n\n"
+    out_path = out_dir / (src.stem + ".md")
+    out_path.write_text(header + body, encoding="utf-8")
+    print(f"  OK {src.name} -> {out_path.name}")
+
+
 def main():
     OUTPUT_DIR.mkdir(exist_ok=True)
-    print(f"Source: {SOURCE_DIR}")
-    print(f"Output: {OUTPUT_DIR}")
-    print("Files found:")
-    for f in sorted(SOURCE_DIR.iterdir()):
-        print(f"  {f.name}")
+    files = sorted(SOURCE_DIR.iterdir())
+    print(f"Processing {len(files)} files...")
+    for f in files:
+        write_markdown(f, OUTPUT_DIR)
+    print("Done.")
+
 
 if __name__ == "__main__":
     main()

@@ -8,11 +8,25 @@ export function ChatWindow() {
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
+  const [elapsed, setElapsed] = useState(0);
   const bottomRef = useRef<HTMLDivElement>(null);
+  const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, [messages]);
+  }, [messages, loading]);
+
+  useEffect(() => {
+    if (loading) {
+      setElapsed(0);
+      timerRef.current = setInterval(() => setElapsed((s) => s + 1), 1000);
+    } else {
+      if (timerRef.current) clearInterval(timerRef.current);
+    }
+    return () => {
+      if (timerRef.current) clearInterval(timerRef.current);
+    };
+  }, [loading]);
 
   async function send() {
     const text = input.trim();
@@ -20,16 +34,42 @@ export function ChatWindow() {
     setInput("");
     setMessages((prev) => [...prev, { role: "user", content: text }]);
     setLoading(true);
+
     try {
       const res = await fetch("/api/chat", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ message: text }),
       });
-      const data = await res.json();
+
+      if (!res.ok || !res.body) {
+        setMessages((prev) => [
+          ...prev,
+          { role: "assistant", content: "请求失败，请稍后重试。" },
+        ]);
+        return;
+      }
+
+      // 流式读取，字符边生成边显示
+      const reader = res.body.getReader();
+      const decoder = new TextDecoder();
+      let reply = "";
+      setMessages((prev) => [...prev, { role: "assistant", content: "" }]);
+
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) break;
+        reply += decoder.decode(value, { stream: true });
+        setMessages((prev) => {
+          const updated = [...prev];
+          updated[updated.length - 1] = { role: "assistant", content: reply };
+          return updated;
+        });
+      }
+    } catch {
       setMessages((prev) => [
         ...prev,
-        { role: "assistant", content: data.reply ?? "（无回复）" },
+        { role: "assistant", content: "网络错误，请检查连接后重试。" },
       ]);
     } finally {
       setLoading(false);
@@ -51,7 +91,10 @@ export function ChatWindow() {
           <MessageBubble key={i} role={m.role} content={m.content} />
         ))}
         {loading && (
-          <div className="text-gray-400 text-sm text-center">思考中…</div>
+          <div className="flex items-center gap-2 text-gray-400 text-sm mt-2">
+            <span className="animate-pulse">●</span>
+            <span>思考中… 已等待 {elapsed} 秒</span>
+          </div>
         )}
         <div ref={bottomRef} />
       </div>
@@ -69,7 +112,7 @@ export function ChatWindow() {
           disabled={loading}
           className="bg-blue-600 text-white px-4 py-2 rounded-lg text-sm disabled:opacity-50"
         >
-          发送
+          {loading ? `${elapsed}s` : "发送"}
         </button>
       </div>
     </div>

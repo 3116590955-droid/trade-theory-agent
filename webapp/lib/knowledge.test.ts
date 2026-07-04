@@ -11,7 +11,7 @@ test("searchKnowledge returns non-empty string for known topic", () => {
 });
 
 test("searchKnowledge returns empty string for unrelated topic", () => {
-  const result = searchKnowledge("quantum physics neutron star");
+  const result = searchKnowledge("xylophone zygote platypus");
   expect(typeof result).toBe("string");
-  // 不强制为空，但不应崩溃
+  expect(result).toBe("");
 });

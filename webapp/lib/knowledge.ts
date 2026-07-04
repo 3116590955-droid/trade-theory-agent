@@ -2,13 +2,13 @@ import fs from "fs";
 import path from "path";
 import matter from "gray-matter";
 
-const KNOWLEDGE_DIR =
-  process.env.KNOWLEDGE_BASE_DIR ||
-  path.resolve(process.cwd(), "../knowledge_base");
-
 const MAX_CHARS = 3000;
 
 export function searchKnowledge(query: string): string {
+  const KNOWLEDGE_DIR =
+    process.env.KNOWLEDGE_BASE_DIR ||
+    path.resolve(process.cwd(), "../knowledge_base");
+
   if (!fs.existsSync(KNOWLEDGE_DIR)) return "";
 
   const files = fs.readdirSync(KNOWLEDGE_DIR).filter((f) => f.endsWith(".md"));
